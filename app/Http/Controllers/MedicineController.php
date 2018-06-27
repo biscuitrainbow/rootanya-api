@@ -21,6 +21,10 @@ class MedicineController extends Controller
         return $medicines;
     }
 
+    public function createByUser(User $user,Request $request){
+        return Medicine::create($request->all());
+    }
+
    
 
 

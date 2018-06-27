@@ -23,5 +23,7 @@ Route::get('/user/{user}/notification','UserController@getNotifications');
 Route::post('/user/{user}/notification/{medicine}','UserController@addNotification');
 
 Route::get('/medicine/query','MedicineController@getMedicineByQuery');
+Route::post('/medicine/user/{user}','MedicineController@createByUser');
+
 Route::resource('/medicine','MedicineController');
 
