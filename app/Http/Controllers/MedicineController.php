@@ -10,6 +10,8 @@ class MedicineController extends Controller
 {
 
     public function getMedicineByQuery(Request $request){
+        if($request->q == '') return array();
+
         $medicines = Medicine::where('barcode','like','%' . $request->q . '%')
         ->orWhere('name','like','%' . $request->q . '%')
         ->orWhere('ingredient','like','%' . $request->q . '%')
