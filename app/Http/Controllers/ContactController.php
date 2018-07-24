@@ -13,7 +13,7 @@ class ContactController extends ApiController
 
     public function __construct()
     {
-        
+
     }
 
     public function index(User $user)

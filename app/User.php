@@ -14,9 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -28,15 +26,18 @@ class User extends Authenticatable
     ];
 
 
-    public function notifications(){
-        return $this->belongsToMany(Medicine::class,'users_has_notification','users_id','medicines_id')->withPivot('uuid', 'at');
+    public function notifications()
+    {
+        return $this->belongsToMany(Medicine::class, 'users_has_notification', 'users_id', 'medicines_id')->withPivot('uuid', 'at');
     }
 
-    public function usages(){
-        return $this->belongsToMany(Medicine::class,'medicines_has_users','users_id','medicines_id')->withPivot('volume','created_at');
+    public function usages()
+    {
+        return $this->belongsToMany(Medicine::class, 'medicines_has_users', 'users_id', 'medicines_id')->withPivot('id', 'volume', 'created_at');
     }
 
-    public function contacts(){
-        return $this->hasMany(Contact::class,'users_id');
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'users_id');
     }
 }

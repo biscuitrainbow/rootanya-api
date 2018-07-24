@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserHasNotification extends Model
 {
     protected $table = 'users_has_notification';
+    protected $primaryKey = 'uuid';
+
 
     protected $guarded = [];
 

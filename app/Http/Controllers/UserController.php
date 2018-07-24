@@ -53,12 +53,20 @@ class UserController extends ApiController
         ]);
     }
 
+    public function deleteNotification(UserHasNotification $noti)
+    {
+        $noti->delete();
+
+        return $this->respondSuccess();
+    }
+
 
     public function getUsages(Request $request, User $user)
     {
         $usages = $user->usages;
 
         $usages = $usages->map(function ($usage) {
+            $usage->usage_id = (int)$usage->pivot->id;
             $usage->volume = (int)$usage->pivot->volume;
             $usage->usage_date = $usage->pivot->created_at->toDateTimeString();
 
@@ -80,5 +88,34 @@ class UserController extends ApiController
             'medicines_id' => $medicine_id,
             'volume' => $volume,
         ]);
+    }
+
+    public function deleteUsage(UserHasMedicine $usage)
+    {
+        $usage->delete();
+
+        return $this->respondSuccess();
+    }
+
+
+    public function updateUsage(UserHasMedicine $usage, Request $request)
+    {
+        $usage->update([
+            'volume' => $request->volume
+        ]);
+
+        return $this->respondSuccess();
+    }
+
+
+    public function update(User $user, Request $request)
+    {
+        $user->update($request->all());
+        
+        $user->age = (int)$user->age;
+        $user->weight = (int)$user->weight;
+        $user->height = (int)$user->height;
+
+        return $this->respond($user);
     }
 }

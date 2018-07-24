@@ -9,25 +9,27 @@ use App\User;
 class MedicineController extends Controller
 {
 
-    public function getMedicineByQuery(Request $request){
-        if($request->q == '') return array();
+    public function getMedicineByQuery(Request $request)
+    {
+        if ($request->q == '') return array();
 
-        $medicines = Medicine::where('barcode','like','%' . $request->q . '%')
-        ->orWhere('name','like','%' . $request->q . '%')
-        ->orWhere('ingredient','like','%' . $request->q . '%')
-        ->orWhere('category','like','%' . $request->q . '%')
-        ->orWhere('type','like','%' . $request->q . '%')
-        ->orWhere('for','like','%' . $request->q . '%')
-        ->get();
+        $medicines = Medicine::where('barcode', 'like', '%' . $request->q . '%')
+            ->orWhere('name', 'like', '%' . $request->q . '%')
+            ->orWhere('ingredient', 'like', '%' . $request->q . '%')
+            ->orWhere('category', 'like', '%' . $request->q . '%')
+            ->orWhere('type', 'like', '%' . $request->q . '%')
+            ->orWhere('for', 'like', '%' . $request->q . '%')
+            ->get();
 
         return $medicines;
     }
 
-    public function createByUser(User $user,Request $request){
+    public function createByUser(User $user, Request $request)
+    {
         return Medicine::create($request->all());
     }
 
-   
+
 
 
 
@@ -38,9 +40,9 @@ class MedicineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
-        return Medicine::all();
+        return Medicine::where('user_id', null)->orWhere('user_id', $user->id)->get();
     }
 
     /**

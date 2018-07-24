@@ -17,15 +17,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/user/login','AuthController@login');
+Route::post('/user/login/{user}','AuthController@loginById');
+
+Route::post('/user/update/{user}','UserController@update');
+
 Route::get('/user/{user}/notification/{medicine}', 'UserController@getNotificationsByMedicine');
 Route::get('/user/{user}/notification', 'UserController@getNotifications');
 Route::post('/user/{user}/notification/{medicine}', 'UserController@addNotification');
+Route::delete('/user/notification/{noti}','UserController@deleteNotification');
 
 Route::get('/user/{user}/usages','UserController@getUsages');
 Route::post('/user/{user}/usage','UserController@createUsage');
+Route::post('/usage/{usage}/','UserController@updateUsage');
+Route::delete('/usage/{usage}/','UserController@deleteUsage');
 
-Route::get('/medicine', 'MedicineController@index');
-Route::get('/medicine/query', 'MedicineController@getMedicineByQuery');
+Route::get('/medicine/{user}', 'MedicineController@index');
+Route::get('/medicine/search/query', 'MedicineController@getMedicineByQuery');
 Route::post('/medicine/user/{user}', 'MedicineController@createByUser');
 
 Route::resource('/contact', 'ContactController');
