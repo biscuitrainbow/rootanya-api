@@ -94,7 +94,8 @@ class UserController extends ApiController
     {
         $history->delete();
 
-        return $this->respondSuccess();
+      //  return $this->respondSuccess();
+        return [];
     }
 
 
@@ -104,14 +105,16 @@ class UserController extends ApiController
             'volume' => $request->volume
         ]);
 
-        return $this->respondSuccess();
+        return [];
+
+      //  return $this->respondSuccess();
     }
 
 
     public function update(User $user, Request $request)
     {
         $user->update($request->all());
-        
+
         $user->age = (int)$user->age;
         $user->weight = (int)$user->weight;
         $user->height = (int)$user->height;
