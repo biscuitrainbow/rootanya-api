@@ -28,9 +28,9 @@ Route::post('/user/{user}/notification/{medicine}', 'UserController@addNotificat
 Route::delete('/user/notification/{noti}','UserController@deleteNotification');
 
 Route::get('/user/{user}/usages','UserController@getUsages');
-Route::post('/user/{user}/usage','UserController@createUsage');
-Route::post('/usage/{usage}/','UserController@updateUsage');
-Route::delete('/usage/{usage}/','UserController@deleteUsage');
+Route::post('/user/{user}/usages','UserController@createUsage');
+Route::post('/usages/{usage}/','UserController@updateUsage');
+Route::delete('/usages/{usage}/','UserController@deleteUsage');
 
 Route::get('/medicine/{user}', 'MedicineController@index');
 Route::get('/medicine/search/query', 'MedicineController@getMedicineByQuery');
