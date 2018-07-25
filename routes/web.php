@@ -27,10 +27,10 @@ Route::get('/user/{user}/notification', 'UserController@getNotifications');
 Route::post('/user/{user}/notification/{medicine}', 'UserController@addNotification');
 Route::delete('/user/notification/{noti}','UserController@deleteNotification');
 
-Route::get('/user/{user}/usages','UserController@getUsages');
-Route::post('/user/{user}/usages','UserController@createUsage');
-Route::post('/usages/{usage}/','UserController@updateUsage');
-Route::delete('/usages/{usage}/','UserController@deleteUsage');
+Route::get('/user/{user}/history','UserController@getUsages');
+Route::post('/user/{user}/history','UserController@createUsage');
+Route::post('/history/{history}/','UserController@updateUsage');
+Route::delete('/history/{history}/','UserController@deleteUsage');
 
 Route::get('/medicine/{user}', 'MedicineController@index');
 Route::get('/medicine/search/query', 'MedicineController@getMedicineByQuery');

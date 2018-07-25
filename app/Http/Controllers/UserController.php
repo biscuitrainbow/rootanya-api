@@ -90,17 +90,17 @@ class UserController extends ApiController
         ]);
     }
 
-    public function deleteUsage(UserHasMedicine $usage)
+    public function deleteUsage(UserHasMedicine $history)
     {
-        $usage->delete();
+        $history->delete();
 
         return $this->respondSuccess();
     }
 
 
-    public function updateUsage(UserHasMedicine $usage, Request $request)
+    public function updateUsage(UserHasMedicine $history, Request $request)
     {
-        $usage->update([
+        $history->update([
             'volume' => $request->volume
         ]);
 
