@@ -121,4 +121,18 @@ class UserController extends ApiController
 
         return $this->respond($user);
     }
+
+
+    public function register(Request $request)
+    {
+        $request->merge(['password' => bcrypt($request->password)]);
+
+        $user = User::create($request->all());
+
+        $user->age = (int)$user->age;
+        $user->weight = (int)$user->weight;
+        $user->height = (int)$user->height;
+
+        return $this->respond($user);
+    }
 }

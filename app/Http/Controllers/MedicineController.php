@@ -9,7 +9,7 @@ use App\User;
 class MedicineController extends Controller
 {
 
-    public function getMedicineByQuery(Request $request)
+    public function getMedicineByQuery(User $user, Request $request)
     {
         if ($request->q == '') return array();
 
@@ -20,6 +20,10 @@ class MedicineController extends Controller
             ->orWhere('type', 'like', '%' . $request->q . '%')
             ->orWhere('for', 'like', '%' . $request->q . '%')
             ->get();
+
+        $medicines = $medicines->filter(function ($medicine) use ($user) {
+            return $medicine->user_id == $user->id || $medicine->user_id == null;
+        });
 
         return $medicines;
     }

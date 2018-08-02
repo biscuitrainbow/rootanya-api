@@ -24,7 +24,6 @@ class AuthController extends Controller
         } 
     }
 
-
     public function loginById(Request $request)
     {
     

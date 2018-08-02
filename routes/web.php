@@ -19,8 +19,8 @@ Route::get('/', function () {
 
 Route::post('/user/login','AuthController@login');
 Route::post('/user/login/{user}','AuthController@loginById');
-
 Route::post('/user/update/{user}','UserController@update');
+Route::post('/user/register/','UserController@register');
 
 Route::get('/user/{user}/notification/{medicine}', 'UserController@getNotificationsByMedicine');
 Route::get('/user/{user}/notification', 'UserController@getNotifications');
@@ -33,7 +33,7 @@ Route::post('/history/{history}/','UserController@updateUsage');
 Route::delete('/history/{history}/','UserController@deleteUsage');
 
 Route::get('/medicine/{user}', 'MedicineController@index');
-Route::get('/medicine/search/query', 'MedicineController@getMedicineByQuery');
+Route::get('/medicine/search/{user}/query', 'MedicineController@getMedicineByQuery');
 Route::post('/medicine/user/{user}', 'MedicineController@createByUser');
 
 Route::resource('/contact', 'ContactController');
