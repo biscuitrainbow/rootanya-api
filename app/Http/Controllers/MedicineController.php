@@ -19,6 +19,7 @@ class MedicineController extends Controller
             ->orWhere('category', 'like', '%' . $request->q . '%')
             ->orWhere('type', 'like', '%' . $request->q . '%')
             ->orWhere('for', 'like', '%' . $request->q . '%')
+            ->orderBy('name')
             ->get();
 
         $medicines = $medicines->filter(function ($medicine) use ($user) {
