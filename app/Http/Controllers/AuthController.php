@@ -5,39 +5,53 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\User;
+use App\Http\Controllers\Api\ApiController;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
     public function login(Request $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
 
-            $user = User::where(['email' => $request->email])->first();
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
 
-            $user->weight = (int)$user->weight;
-            $user->height = (int)$user->height;
+        if (auth()->attempt($credentials)) {
+            $user = auth()->user();
+            $user->token = $user->createToken('RooTanYa')->accessToken;
 
-            return [
-                'status' => 'success',
-                'data' => $user
-            ];
-        } 
+            return $this->respond($user);
+        } else {
+            return $this->respondUnauthorized();
+        }
     }
 
-    public function loginById(Request $request)
+    public function logout(Request $request)
     {
-    
-        if (Auth::loginUsingId($request->id)) {
+        auth()->user()->token()->revoke();
 
-            $user = User::find($request->id);
-
-            $user->weight = (int)$user->weight;
-            $user->height = (int)$user->height;
-
-            return [
-                'status' => 'success',
-                'data' => $user
-            ];
-        } 
+        return $this->respondSuccess();
     }
+
+    // public function loginById(Request $request)
+    // {
+
+    //     if (Auth::loginUsingId($request->id)) {
+
+    //         $user = User::find($request->id);
+
+    //         $user->weight = (int)$user->weight;
+    //         $user->height = (int)$user->height;
+
+    //         return [
+    //             'status' => 'success',
+    //             'data' => $user
+    //         ];
+    //     }
+    // }
 }

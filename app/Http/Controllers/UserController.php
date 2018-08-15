@@ -8,131 +8,69 @@ use App\Medicine;
 use App\UserHasNotification;
 use App\UserHasMedicine;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Validation\Rule;
 
 class UserController extends ApiController
 {
-    public function getNotifications(User $user, Request $request)
+    public function detail(Request $request)
     {
-        $medicines = $user->notifications()->get();
-
-        $uq_medicines = $medicines->unique('id')->values();
-
-        $uq_medicines->map(function ($med) {
-            $med->notifications;
-            return $med;
-        });
-
-        $uq_medicines->forget('pivot');
-
-        return $uq_medicines;
+        $user = auth()->user();
+        return $user;
     }
 
-
-    public function getNotificationsByMedicine(User $user, Medicine $medicine)
+    public function update(User $user, Request $request)
     {
-        $notifications = $medicine->notifications->filter(function ($n) use ($user) {
-            return $n->users_id == $user->id;
-        });
-
-        $medicine->user_notifications = $notifications;
-
-        return $medicine;
-    }
-
-    public function addNotification(Request $request, User $user, Medicine $medicine)
-    {
-
-        $at = $request->at;
-        $uuid = $request->uuid;
-
-        return UserHasNotification::create([
-            'users_id' => $user->id,
-            'medicines_id' => $medicine->id,
-            'at' => $at,
-            'uuid' => $uuid,
+        $this->validate($request, [
+            'name' => 'required|min:3',
+            'gender' => ['required', Rule::in(['หญิง', 'ชาย'])],
+            'age' => 'min:1|max:100',
+            'height' => 'required|numeric',
+            'weight' => 'required|numeric',
         ]);
-    }
 
-    public function deleteNotification(UserHasNotification $noti)
-    {
-        $noti->delete();
+        $user = auth()->user();
+        $user->update([
+            'name' => $request->name,
+            'gender' => $request->gender,
+            'age' => $request->age,
+            'height' => $request->height,
+            'weight' => $request->weight,
+            'intolerance' => $request->intolerance,
+            'medicine' => $request->medicine,
+            'disease' => $request->disease,
+        ]);
 
         return $this->respondSuccess();
     }
 
 
-    public function getUsages(Request $request, User $user)
-    {
-        $usages = $user->usages;
-
-        $usages = $usages->map(function ($usage) {
-            $usage->usage_id = (int)$usage->pivot->id;
-            $usage->volume = (int)$usage->pivot->volume;
-            $usage->usage_date = $usage->pivot->created_at->toDateTimeString();
-
-            return $usage;
-        });
-
-        return $usages;
-    }
-
-
-    public function createUsage(Request $request, User $user)
-    {
-        $medicine_id = $request->medicine_id;
-        $volume = $request->volume;
-
-
-        return UserHasMedicine::create([
-            'users_id' => $user->id,
-            'medicines_id' => $medicine_id,
-            'volume' => $volume,
-        ]);
-    }
-
-    public function deleteUsage(UserHasMedicine $history)
-    {
-        $history->delete();
-
-      //  return $this->respondSuccess();
-        return [];
-    }
-
-
-    public function updateUsage(UserHasMedicine $history, Request $request)
-    {
-        $history->update([
-            'volume' => $request->volume
-        ]);
-
-        return [];
-
-      //  return $this->respondSuccess();
-    }
-
-
-    public function update(User $user, Request $request)
-    {
-        $user->update($request->all());
-
-        $user->age = (int)$user->age;
-        $user->weight = (int)$user->weight;
-        $user->height = (int)$user->height;
-
-        return $this->respond($user);
-    }
-
-
     public function register(Request $request)
     {
-        $request->merge(['password' => bcrypt($request->password)]);
+        $this->validate($request, [
+            'name' => 'required|min:3',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'gender' => ['required', Rule::in(['หญิง', 'ชาย'])],
+            'age' => 'min:1|max:100',
+            'height' => 'required|numeric',
+            'weight' => 'required|numeric',
+        ]);
 
-        $user = User::create($request->all());
+        $user = User::create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'name' => $request->name,
+            'gender' => $request->gender,
+            'age' => $request->age,
+            'height' => $request->height,
+            'weight' => $request->weight,
+            'intolerance' => $request->intolerance,
+            'medicine' => $request->medicine,
+            'disease' => $request->disease,
+        ]);
 
-        $user->age = (int)$user->age;
-        $user->weight = (int)$user->weight;
-        $user->height = (int)$user->height;
+        $user->token = $user->createToken('RooTanYa')->accessToken;
 
-        return $this->respond($user);
+        return $this->respondCreated($user);
     }
 }

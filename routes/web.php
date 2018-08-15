@@ -17,30 +17,26 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/user/login','AuthController@login');
-Route::post('/user/login/{user}','AuthController@loginById');
-Route::post('/user/update/{user}','UserController@update');
-Route::post('/user/register/','UserController@register');
 
-Route::get('/user/{user}/notification/{medicine}', 'UserController@getNotificationsByMedicine');
-Route::get('/user/{user}/notification', 'UserController@getNotifications');
-Route::post('/user/{user}/notification/{medicine}', 'UserController@addNotification');
-Route::delete('/user/notification/{noti}','UserController@deleteNotification');
 
-Route::get('/user/{user}/history','UserController@getUsages');
-Route::post('/user/{user}/history','UserController@createUsage');
-Route::post('/history/{history}/','UserController@updateUsage');
-Route::delete('/history/{history}/','UserController@deleteUsage');
+// Route::get('/user/{user}/notification/{medicine}', 'NotificationController@getNotificationsByMedicine');
+// Route::get('/user/{user}/notification', 'NotificationController@getNotifications');
+// Route::post('/user/{user}/notification/{medicine}', 'NotificationController@addNotification');
+// Route::delete('/user/notification/{noti}', 'NotificationController@deleteNotification');
 
-Route::get('/medicine/{user}', 'MedicineController@index');
-Route::get('/medicine/search/{user}/query', 'MedicineController@getMedicineByQuery');
-Route::post('/medicine/user/{user}', 'MedicineController@createByUser');
+// Route::get('/user/{user}/history', 'UsageController@getUsages');
+// Route::post('/user/{user}/history', 'UsageController@createUsage');
+// Route::post('/history/{history}/', 'UsageController@updateUsage');
+// Route::delete('/history/{history}/', 'UsageController@deleteUsage');
 
-Route::resource('/contact', 'ContactController');
+// Route::get('/medicine/{user}', 'MedicineController@index');
+// Route::get('/medicine/search/{user}/query', 'MedicineController@getMedicineByQuery');
+// Route::post('/medicine/user/{user}', 'MedicineController@createByUser');
 
-Route::get('/contact/user/{user}','ContactController@index');
-Route::post('/contact/user/{user}','ContactController@store');
-Route::post('/contact/{contact}','ContactController@update');
+// Route::resource('/contact', 'ContactController');
 
-Route::resource('/medicine', 'MedicineController');
+// Route::get('/contact/user/{user}', 'ContactController@index');
+// Route::post('/contact/user/{user}', 'ContactController@store');
+// Route::post('/contact/{contact}', 'ContactController@update');
+// Route::resource('/medicine', 'MedicineController');
 
