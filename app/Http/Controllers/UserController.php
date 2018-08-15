@@ -35,6 +35,7 @@ class UserController extends ApiController
             'age' => $request->age,
             'height' => $request->height,
             'weight' => $request->weight,
+            'tel' => $request->tel,
             'intolerance' => $request->intolerance,
             'medicine' => $request->medicine,
             'disease' => $request->disease,

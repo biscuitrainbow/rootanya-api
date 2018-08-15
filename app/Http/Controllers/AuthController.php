@@ -37,21 +37,4 @@ class AuthController extends ApiController
 
         return $this->respondSuccess();
     }
-
-    // public function loginById(Request $request)
-    // {
-
-    //     if (Auth::loginUsingId($request->id)) {
-
-    //         $user = User::find($request->id);
-
-    //         $user->weight = (int)$user->weight;
-    //         $user->height = (int)$user->height;
-
-    //         return [
-    //             'status' => 'success',
-    //             'data' => $user
-    //         ];
-    //     }
-    // }
 }
