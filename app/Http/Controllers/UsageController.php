@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\UserHasMedicine;
+use App\Http\Controllers\Api\ApiController;
 
-class UsageController extends Controller
+class UsageController extends ApiController
 {
-    public function getUsages(Request $request, User $user)
+    public function getUsages(Request $request)
     {
+        $user = auth()->user();
         $usages = $user->usages;
 
         $usages = $usages->map(function ($usage) {
@@ -22,11 +25,16 @@ class UsageController extends Controller
     }
 
 
-    public function createUsage(Request $request, User $user)
+    public function createUsage(Request $request)
     {
+        $this->validate($request, [
+            'volume' => 'required|numeric',
+            'medicine_id' => 'required|exists:medicines,id',
+        ]);
+
+        $user = auth()->user();
         $medicine_id = $request->medicine_id;
         $volume = $request->volume;
-
 
         return UserHasMedicine::create([
             'users_id' => $user->id,
@@ -35,23 +43,24 @@ class UsageController extends Controller
         ]);
     }
 
-    public function deleteUsage(UserHasMedicine $history)
+    public function deleteUsage(Request $request, UserHasMedicine $usage)
     {
-        $history->delete();
+        $usage->delete();
 
-      //  return $this->respondSuccess();
-        return [];
+        return $this->respondSuccess();
     }
 
 
-    public function updateUsage(UserHasMedicine $history, Request $request)
+    public function updateUsage(UserHasMedicine $usage, Request $request)
     {
-        $history->update([
+        $this->validate($request, [
+            'volume' => 'required|numeric',
+        ]);
+
+        $usage->update([
             'volume' => $request->volume
         ]);
 
-        return [];
-
-      //  return $this->respondSuccess();
+        return $this->respondSuccess();
     }
 }

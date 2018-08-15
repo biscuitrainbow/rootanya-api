@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Medicine;
 use Illuminate\Http\Request;
 use App\User;
+use App\Http\Controllers\Api\ApiController;
 
-class MedicineController extends Controller
+class MedicineController extends ApiController
 {
 
-    public function getMedicineByQuery(User $user, Request $request)
+    public function getMedicineByQuery(Request $request)
     {
-        if ($request->q == '') return array();
+        if ($request->q == '') return $this->respond([]);
 
+        $user = auth()->user();
         $medicines = Medicine::where('barcode', 'like', '%' . $request->q . '%')
             ->orWhere('name', 'like', '%' . $request->q . '%')
             ->orWhere('ingredient', 'like', '%' . $request->q . '%')
@@ -29,90 +31,24 @@ class MedicineController extends Controller
         return $medicines;
     }
 
-    public function createByUser(User $user, Request $request)
+    public function createByUser(Request $request)
     {
-        return Medicine::create($request->all());
+        $this->validate($request, [
+            'name' => 'required|min:3',
+            'barcode' => 'required|min:3',
+        ]);
+
+        $user = auth()->user();
+
+        $medicine = new Medicine($request->all());
+        $user->medicines()->save($medicine);
+
+        return $this->respondCreated($medicine);
     }
 
 
-
-
-
-
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(User $user)
+    public function index()
     {
         return Medicine::where('user_id', null)->orWhere('user_id', $user->id)->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Medicine  $medicine
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Medicine $medicine)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Medicine  $medicine
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Medicine $medicine)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Medicine  $medicine
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Medicine $medicine)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Medicine  $medicine
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Medicine $medicine)
-    {
-        //
     }
 }

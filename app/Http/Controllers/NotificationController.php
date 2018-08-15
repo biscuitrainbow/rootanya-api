@@ -3,23 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Medicine;
+use App\UserHasNotification;
+use App\Http\Controllers\Api\ApiController;
 
-class NotificationController extends Controller
+class NotificationController extends ApiController
 {
-    public function getNotifications(Request $request, User $user)
+    public function getNotifications(Request $request)
     {
+        $user = auth()->user();
         $medicines = $user->notifications()->get();
 
-        $uq_medicines = $medicines->unique('id')->values();
-
-        $uq_medicines->map(function ($med) {
-            $med->notifications;
-            return $med;
+        $unique_medicines = $medicines->unique('id')->values();
+        $unique_medicines->map(function ($medicine) {
+            $medicine->notifications;
+            return $medicine;
         });
 
-        $uq_medicines->forget('pivot');
 
-        return $uq_medicines;
+        return $unique_medicines;
     }
 
 
@@ -34,24 +36,26 @@ class NotificationController extends Controller
         return $medicine;
     }
 
-    public function addNotification(Request $request, User $user, Medicine $medicine)
+    public function addNotification(Request $request)
     {
-
+        $user = auth()->user();
+        $medicine = Medicine::find($request->medicine_id);
         $at = $request->at;
         $uuid = $request->uuid;
 
-        return UserHasNotification::create([
+        $notification = UserHasNotification::create([
             'users_id' => $user->id,
             'medicines_id' => $medicine->id,
             'at' => $at,
             'uuid' => $uuid,
         ]);
+
+        return $this->respondCreated($notification);
     }
 
-    public function deleteNotification(UserHasNotification $noti)
+    public function deleteNotification(UserHasNotification $notification)
     {
-        $noti->delete();
-
+        $notification->delete();
         return $this->respondSuccess();
     }
 }
