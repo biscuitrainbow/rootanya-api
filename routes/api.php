@@ -38,8 +38,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('/contact/user/', 'ContactController@index');
     Route::post('/contact/user/', 'ContactController@store');
-    Route::put('/contact/{contact}', 'ContactController@update');
-    Route::delete('/contact/{contact}', 'ContactController@destroy');
+    Route::put('/contact/user/{contact}', 'ContactController@update');
+    Route::delete('/contact/user/{contact}', 'ContactController@destroy');
 
     Route::get('/usage/user', 'UsageController@getUsages');
     Route::post('/usage/user', 'UsageController@createUsage');
