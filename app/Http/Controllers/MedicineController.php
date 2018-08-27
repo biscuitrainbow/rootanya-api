@@ -13,7 +13,7 @@ class MedicineController extends ApiController
 
     public function getMedicineByQuery(Request $request)
     {
-       // if ($request->q == '') return $this->respond([]);
+       if ($request->q == '') return $this->respond([]);
 
         $user = auth()->user();
         $medicines = Medicine::where('barcode', 'like', '%' . $request->q . '%')
