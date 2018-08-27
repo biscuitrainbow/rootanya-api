@@ -6,13 +6,14 @@ use App\Medicine;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Controllers\Api\ApiController;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MedicineController extends ApiController
 {
 
     public function getMedicineByQuery(Request $request)
     {
-        if ($request->q == '') return $this->respond([]);
+       // if ($request->q == '') return $this->respond([]);
 
         $user = auth()->user();
         $medicines = Medicine::where('barcode', 'like', '%' . $request->q . '%')
@@ -28,7 +29,7 @@ class MedicineController extends ApiController
             return $medicine->user_id == $user->id || $medicine->user_id == null;
         });
 
-        return $medicines;
+        return $this->respond($medicines->values());
     }
 
     public function createByUser(Request $request)
@@ -50,5 +51,14 @@ class MedicineController extends ApiController
     public function index()
     {
         return Medicine::where('user_id', null)->orWhere('user_id', $user->id)->get();
+    }
+
+    public function importFile(Request $request)
+    {
+        $file = $request->file('file');
+
+        return $sheet = Excel::load($file->getRealPath(), function ($reader) {
+          
+        })->get();;
     }
 }

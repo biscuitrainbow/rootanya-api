@@ -21,7 +21,7 @@ class ContactController extends ApiController
     {
         $this->validate($request, [
             'name' => 'required',
-            'tel' => 'required|min:10||unique:contacts',
+            'tel' => 'required|min:10|unique:contacts',
         ]);
 
         $user = auth()->user();
@@ -34,7 +34,7 @@ class ContactController extends ApiController
     {
         $this->validate($request, [
             'name' => 'required',
-            'tel' => 'required|min:10||unique:contacts',
+            'tel' => 'required|min:10',
         ]);
         
         $contact->update($request->all());

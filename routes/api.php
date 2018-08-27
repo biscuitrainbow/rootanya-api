@@ -46,6 +46,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/usage/user/{usage}', 'UsageController@updateUsage');
     Route::delete('/usage/user/{usage}', 'UsageController@deleteUsage');
 
+    Route::post('/admin/medicine/file','MedicineController@importFile');
+
 });
 
 
