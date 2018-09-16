@@ -13,7 +13,7 @@ class MedicineController extends ApiController
 
     public function getMedicineByQuery(Request $request)
     {
-       if ($request->q == '') return $this->respond([]);
+        if ($request->q == '') return $this->respond([]);
 
         $user = auth()->user();
         $medicines = Medicine::where('barcode', 'like', '%' . $request->q . '%')
@@ -48,9 +48,17 @@ class MedicineController extends ApiController
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
-        return Medicine::where('user_id', null)->orWhere('user_id', $user->id)->get();
+        $user = auth('api')->user();
+        if ($user == null) {
+            $medicines = Medicine::where('user_id', null)->get();
+            return $this->respond($medicines);
+        }
+
+        $medicines = Medicine::where('user_id', null)->orWhere('user_id', $user->id)->get();
+        return $this->respond($medicines);
+
     }
 
     public function importFile(Request $request)
@@ -58,7 +66,7 @@ class MedicineController extends ApiController
         $file = $request->file('file');
 
         return $sheet = Excel::load($file->getRealPath(), function ($reader) {
-          
+
         })->get();;
     }
 }

@@ -21,6 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/user/login', 'AuthController@login');
 Route::post('/user/login/{user}', 'AuthController@loginById');
 Route::post('/user/register/', 'UserController@register');
+Route::get('/medicine/index', 'MedicineController@index');
+
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/user', 'UserController@detail');
@@ -46,7 +48,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/usage/user/{usage}', 'UsageController@updateUsage');
     Route::delete('/usage/user/{usage}', 'UsageController@deleteUsage');
 
-    Route::post('/admin/medicine/file','MedicineController@importFile');
+    Route::post('/admin/medicine/file', 'MedicineController@importFile');
 
 });
 

@@ -22,19 +22,19 @@ class UserController extends ApiController
     {
         $this->validate($request, [
             'name' => 'required|min:3',
-            'gender' => ['required', Rule::in(['หญิง', 'ชาย'])],
+            'gender' => ['required', Rule::in(['หญิง', 'ชาย', 'ไม่ระบุ'])],
             'age' => 'min:1|max:100',
-            'height' => 'required|numeric',
-            'weight' => 'required|numeric',
+            // 'height' => 'numeric',
+            // 'weight' => 'numeric',
         ]);
 
         $user = auth()->user();
         $user->update([
             'name' => $request->name,
             'gender' => $request->gender,
-            'age' => $request->age,
-            'height' => $request->height,
-            'weight' => $request->weight,
+            'age' => $request->age != 'null' ? $request->age : null,
+            'height' => $request->height != 'null' ? $request->height : null,
+            'weight' => $request->weight != 'null' ? $request->weight : null,
             'tel' => $request->tel,
             'intolerance' => $request->intolerance,
             'medicine' => $request->medicine,
@@ -51,11 +51,12 @@ class UserController extends ApiController
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'gender' => ['required', Rule::in(['หญิง', 'ชาย'])],
+            'gender' => ['required', Rule::in(['หญิง', 'ชาย', 'ไม่ระบุ'])],
             'age' => 'min:1|max:100',
-            'height' => 'required|numeric',
-            'weight' => 'required|numeric',
+            // 'height' => 'numeric',
+            // 'weight' => 'numeric',
         ]);
+
 
         $user = User::create([
             'email' => $request->email,

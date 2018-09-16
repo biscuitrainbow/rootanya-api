@@ -40,3 +40,8 @@ Route::get('/', function () {
 // Route::post('/contact/{contact}', 'ContactController@update');
 // Route::resource('/medicine', 'MedicineController');
 
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
