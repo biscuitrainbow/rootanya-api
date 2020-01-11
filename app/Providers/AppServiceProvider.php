@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $view->with('telescopeScriptVariables', ['path' => 'rootanya/telescope', 'timezone' => config('app.timezone'), 'recording' => !cache('telescope:pause-recording'),]);
+        view()->composer(['telescope::layout'], function ($view) {
+            $view->with('telescopeScriptVariables', ['path' => 'rootanya/telescope', 'timezone' => config('app.timezone'), 'recording' => !cache('telescope:pause-recording'),]);
+        });
     }
 
     /**
