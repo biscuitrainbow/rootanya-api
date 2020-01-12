@@ -19,13 +19,13 @@ class ContactController extends ApiController
 
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validated = $this->validate($request, [
             'name' => 'required',
             'tel' => 'required|unique:contacts',
         ]);
 
         $user = auth()->user();
-        $contact = $user->contacts()->save(new Contact($request->all()));
+        $contact = $user->contacts()->save(new Contact($validated));
 
         return $this->respondCreated($contact);
     }
@@ -36,7 +36,7 @@ class ContactController extends ApiController
             'name' => 'required',
             'tel' => 'required',
         ]);
-        
+
         $contact->update($request->all());
 
         return $this->respondSuccess();
