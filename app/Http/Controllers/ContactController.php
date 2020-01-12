@@ -32,12 +32,12 @@ class ContactController extends ApiController
 
     public function update(Request $request, Contact $contact)
     {
-        $this->validate($request, [
+        $validated = $this->validate($request, [
             'name' => 'required',
             'tel' => 'required',
         ]);
 
-        $contact->update($request->all());
+        $contact->update($validated);
 
         return $this->respondSuccess();
     }

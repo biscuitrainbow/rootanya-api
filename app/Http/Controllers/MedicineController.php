@@ -34,14 +34,14 @@ class MedicineController extends ApiController
 
     public function createByUser(Request $request)
     {
-        $this->validate($request, [
+        $validated = $this->validate($request, [
             'name' => 'required|min:3',
             'barcode' => 'required|min:3',
         ]);
 
         $user = auth()->user();
 
-        $medicine = new Medicine($request->all());
+        $medicine = new Medicine($validated);
         $user->medicines()->save($medicine);
 
         return $this->respondCreated($medicine);
@@ -58,15 +58,12 @@ class MedicineController extends ApiController
 
         $medicines = Medicine::where('user_id', null)->orWhere('user_id', $user->id)->get();
         return $this->respond($medicines);
-
     }
 
     public function importFile(Request $request)
     {
         $file = $request->file('file');
 
-        return $sheet = Excel::load($file->getRealPath(), function ($reader) {
-
-        })->get();;
+        return $sheet = Excel::load($file->getRealPath(), function ($reader) { })->get();;
     }
 }
